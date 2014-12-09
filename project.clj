@@ -12,6 +12,7 @@
                  [environ "1.0.0"]
                  [im.chit/cronj "1.4.3"]
                  [noir-exception "0.2.3"]
+                 [clj-http "1.0.1"]
                  [prone "0.6.0"]]
 
   :repl-options {:init-ns aha.repl}
