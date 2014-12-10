@@ -13,6 +13,8 @@
                  [im.chit/cronj "1.4.3"]
                  [noir-exception "0.2.3"]
                  [clj-http "1.0.1"]
+                 [org.clojure/data.codec "0.1.0"]
+                 [org.clojure/data.json "0.2.5"]
                  [prone "0.6.0"]]
 
   :repl-options {:init-ns aha.repl}
