@@ -3,6 +3,7 @@
   (:require [clj-http.client :as client])
   (:require [clojure.data.codec.base64 :as b64])
   (:require [clojure.data.json :as json])
+  (:require [noir.session :as session])
   (:use ring.util.response))
 
 (use '[ring.util.codec :only [url-encode]])
@@ -12,6 +13,11 @@
          (str (url-encode k) "=" (url-encode v)))
        (interpose "&")
        (apply str)))
+
+(defn logout []
+  (session/put! :user nil)
+  (redirect "/")
+)
 
 (defn login [params] 
   (let [google-oauth2-client-id (System/getenv "AHA_GOOGLE_OAUTH2_CLIENT_ID")
@@ -54,10 +60,6 @@
     )
 )
 
-(defn pad-payload [payload]
-  
-)
-
 ; parses out the payload from the token and adds necessary padding
 (defn parse-jwt-token [jwt-token]
   (let [payload (second (str/split jwt-token #"\."))]
@@ -75,9 +77,13 @@
         payload-json (string-to-base64-string payload-encoded)        
         payload (json/read-str payload-json)
         email (payload "email")]
-    (println admin-users)
-    (if (false? (nil? (some #{email} admin-users))) ; log them in!      
-      (redirect "/about") 
+    (if (false? (nil? (some #{email} admin-users)))
+      ; log them in!      
+      (do
+        (session/put! :user email)
+        (redirect "/about"))
+      
+      ; unrecognized email
       (let [message (str "Unrecognized admin email: " email)]
         (redirect (str "/error?message=" (url-encode message))))
       )
