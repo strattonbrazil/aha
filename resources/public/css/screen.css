@@ -1,7 +1,15 @@
 html,
 body {
-	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     height: 100%;
+}
+
+.add-widget-button {
+    text-align: center;
+}
+
+.add-widget-button:hover {
+    background-color: rgba(0,0,255,0.4);
 }
 
 .login-notice {

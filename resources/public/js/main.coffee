@@ -18,12 +18,39 @@ $.contextMenu({
 
 })
 
-class EditViewModel
+class LayoutViewModel
     constructor: ->
-        @headerText = 'HEADER'
+        @header = ko.observable({
+            text: 'ack'
+        })
+        @layoutItems = ko.observableArray()
+
+        @_requestLayout()
+
+    addWidgetInfo: (index) ->
+        return index
+        console.log(index)
+
+    addWidget: ->
+        $('#add-widget-dialog').dialog({})
+        console.log($('#add-widget-dialog'))
+        #model.index
+        #console.log(foo)
+        #console.log(bar)
+
+    addGallery: (index) ->
+        console.log(index)
+
+    _requestLayout: =>
+        callback = (data) =>
+            console.log(data)
+            @header({ text: data.header })
+            @layoutItems(data.widgets)
+        $.getJSON("/layout", callback)
+
 
 ready = ->
-    ko.applyBindings(new EditViewModel())
+    ko.applyBindings(new LayoutViewModel())
     console.log('starting knockout')
 
 $(document).ready(ready)

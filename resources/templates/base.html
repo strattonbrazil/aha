@@ -3,6 +3,14 @@
   <head>
     <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Welcome to aha</title>
+
+    <script type="text/html" id="header-template">
+      <div class="row">
+        <div class="columns-12 large">
+
+        </div>
+      </div>
+    </script>
   </head>
   <body>
     {% if user %}
@@ -10,17 +18,19 @@
       Logged in as "{{ user }}" (<a href="/logout">logout</a>)
     </div>
     {% endif %}
+
     <div class="row">
       <div class="columns-12 large">
         <div class="home-header {% if user %}right-click-edit{% endif %}">
-          <h1 data-bind="text: headerText">_HEADER_</h1>
-        </div>
+          <h1 id="header" data-bind="text: header().text"></h1>
+        </div>        
       </div>
     </div>
+
     <nav class="top-bar" data-topbar role="navigation">
       <ul class="title-area">
         <li class="name">
-          <h1><a href="#">My Site</a></h1>
+          <h1><a href="#">Aha!</a></h1>
         </li>
         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
         <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
@@ -45,6 +55,28 @@
         </ul>
       </section>
     </nav>
+
+    <div class="row">
+      <div class="columns-12 large">
+        <div data-bind="foreach: layoutItems">          
+          {% if user %}
+          <div data-bind="if: $index() == 0">
+            <div data-bind="template: { name: 'add-widget-template', data: { index: $index(), callback: $parent.addWidget } }"></div>
+          </div>
+          {% endif %}
+
+          <div data-bind="if: type == 'header'">
+            <div data-bind="template: { name: 'header-template' }"></div>
+          </div>
+          {% if user %}
+          <div data-bind="template: { name: 'add-widget-template', data: { index: $index()+1, callback: $parent.addWidget } }"></div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+
+
     
     <div class="row">
       <div class="columns-12 large">
@@ -62,6 +94,7 @@
     <!-- scripts and styles -->
     {% style "/libs/foundation-5.5.0/css/foundation.min.css" %}
     {% style "/libs/jquery-contextMenu/jquery.contextMenu.css" %}
+    {% style "/libs/jquery-ui-1.11.2/jquery-ui.css" %}
     {% style "/css/screen.css" %}
 
 
@@ -70,6 +103,7 @@
     {% script "/libs/foundation-5.5.0/js/vendor/fastclick.js" %}
     {% script "/libs/foundation-5.5.0/js/foundation.min.js" %}
     {% script "/libs/jquery-contextMenu/jquery.contextMenu.js" %}
+    {% script "/libs/jquery-ui-1.11.2/jquery-ui.js" %}
     {% script "/libs/knockout-3.2.0/knockout-3.2.0.js" %}
     {% script "/js/main.js" %}
 

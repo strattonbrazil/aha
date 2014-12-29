@@ -28,3 +28,19 @@
 (defn render [template & [params]]
   (RenderableTemplate. template params))
 
+(defn header-widget []
+  {:type :header
+   :text "Aha Header"}
+)
+
+(defn add-widget-ids [widgets]
+  (let [ids (take (count widgets) (range))]
+    (map (fn [widget id] (assoc widget :id (str "element-" id))) widgets ids))
+)
+
+(defn layout []
+  (let [widgets [{:type :foo} {:type :bar}]]
+    {:content-type :json 
+     :body {:header "Hey, Person!" :widgets (add-widget-ids widgets)} }
+    )
+)

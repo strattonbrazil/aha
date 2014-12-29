@@ -15,6 +15,8 @@
                  [clj-http "1.0.1"]
                  [org.clojure/data.codec "0.1.0"]
                  [org.clojure/data.json "0.2.5"]
+                 [korma "0.3.0"]
+                 [com.h2database/h2 "1.3.170"]
                  [prone "0.6.0"]]
 
   :repl-options {:init-ns aha.repl}
