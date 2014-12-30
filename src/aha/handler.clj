@@ -11,6 +11,7 @@
             [taoensso.timbre.appenders.rotor :as rotor]
             [selmer.parser :as parser]
             [environ.core :refer [env]]
+            [aha.db.schema :as schema]
             [cronj.core :as cronj]))
 
 (defroutes base-routes
@@ -34,6 +35,10 @@
   (timbre/set-config!
     [:shared-appender-config :rotor]
     {:path "aha.log" :max-size (* 512 1024) :backlog 10})
+
+  ;;initialize the database if needed
+  (when-not (schema/initialized?)
+    (schema/create-tables))
 
   (if (env :dev) (parser/cache-off!))
   ;;start the expired session cleanup job

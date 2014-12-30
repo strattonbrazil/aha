@@ -3,7 +3,7 @@
             [noir.session :as session]
             [aha.layout :as layout]
             [aha.login :as login]
-            [aha.data :as db]
+            [aha.db.core :as db]
             [aha.util :as util])
   (:use ring.util.response))
 
@@ -17,6 +17,7 @@
         (layout/render "admin.html" {:user (session/get :user)}))))
 
 (defn about-page []
+  (db/save-page "my page" "some message")
   (println (db/get-pages))
   (layout/render "about.html" {:user (session/get :user)}))
 
