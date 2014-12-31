@@ -19,14 +19,6 @@
     </div>
     {% endif %}
 
-    <div class="row">
-      <div class="columns-12 large">
-        <div class="home-header {% if user %}right-click-edit{% endif %}">
-          <h1 id="header" data-bind="text: header().text"></h1>
-        </div>        
-      </div>
-    </div>
-
     <nav class="top-bar" data-topbar role="navigation">
       <ul class="title-area">
         <li class="name">
@@ -55,28 +47,6 @@
         </ul>
       </section>
     </nav>
-
-    <div class="row">
-      <div class="columns-12 large">
-        <div data-bind="foreach: layoutItems">          
-          {% if user %}
-          <div data-bind="if: $index() == 0">
-            <div data-bind="template: { name: 'add-widget-template', data: { index: $index(), callback: $parent.addWidget } }"></div>
-          </div>
-          {% endif %}
-
-          <div data-bind="if: type == 'header'">
-            <div data-bind="template: { name: 'header-template' }"></div>
-          </div>
-          {% if user %}
-          <div data-bind="template: { name: 'add-widget-template', data: { index: $index()+1, callback: $parent.addWidget } }"></div>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-
-
-
     
     <div class="row">
       <div class="columns-12 large">
@@ -105,7 +75,6 @@
     {% script "/libs/jquery-contextMenu/jquery.contextMenu.js" %}
     {% script "/libs/jquery-ui-1.11.2/jquery-ui.js" %}
     {% script "/libs/knockout-3.2.0/knockout-3.2.0.js" %}
-    {% script "/js/main.js" %}
 
     <script type="text/javascript">
       var context = "{{servlet-context}}";

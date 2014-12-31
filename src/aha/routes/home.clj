@@ -28,6 +28,12 @@
 (defn login-page []
   (layout/render "login.html"))
 
+(defn get-pages []
+  (let [pages (db/get-pages)]
+    {:content-type :json
+     :body { :pages pages }
+     }))
+
 (defroutes home-routes
   (GET "/" [] (home-page))
   (GET "/admin" [] (admin-page))
@@ -38,4 +44,5 @@
   (GET "/oauth2Callback" {params :params} (login/oauth2-callback params))
   (GET "/logout" [] (login/logout))
   (GET "/layout" [] (layout/layout))
+  (GET "/pages" [] (get-pages))
 )

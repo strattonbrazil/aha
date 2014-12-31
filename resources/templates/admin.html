@@ -9,6 +9,19 @@
         <tr><td>Illustration</td><td>Gallery</td><td>Work</td><td>gear</td></tr>
         <tr><td>Store</td><td>Link</td><td>Shop</td></tr>
       </table>
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Type</th><th>Menu</th></tr>
+        </thead>
+        <tbody data-bind="foreach: pages">
+          <tr>
+            <td data-bind="text: name"></td>
+            <td>edit</td>
+          </tr>
+        </tbody>
+    </tbody>
+      </table>
+      <button>New Page</button>
       <h1>Image Tags</h1>
     </div>
 
@@ -17,4 +30,8 @@
 
     </div>
   </div>
+{% endblock %}
+
+{% block page-scripts %}
+{% script "/js/admin.js" %}
 {% endblock %}
