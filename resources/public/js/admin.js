@@ -28,19 +28,160 @@
   AdminViewModel = (function() {
 
     function AdminViewModel() {
+      this._createPage = __bind(this._createPage, this);
+
+      this.newPage = __bind(this.newPage, this);
+
+      this._createMenu = __bind(this._createMenu, this);
+
+      this.newMenu = __bind(this.newMenu, this);
+
+      this.editMenu = __bind(this.editMenu, this);
+
+      this.editPage = __bind(this.editPage, this);
+
       this._requestPages = __bind(this._requestPages, this);
       this.pages = ko.observableArray();
+      this.menus = ko.observableArray();
       this._requestPages();
     }
 
     AdminViewModel.prototype._requestPages = function() {
-      var callback,
+      var parseResponse,
         _this = this;
-      callback = function(data) {
-        console.log(data);
+      parseResponse = function(data) {
+        _this.menus(data.menus);
         return _this.pages(data.pages);
       };
-      return $.getJSON("/pages", callback);
+      return $.getJSON("/pages", parseResponse);
+    };
+
+    AdminViewModel.prototype.editPage = function(page, event) {
+      var closedCallback, editDialog, nameInput, pageName,
+        _this = this;
+      if (page == null) {
+        page = {};
+      }
+      if (page.label != null) {
+        pageName = page.label;
+      } else {
+        pageName = 'new_page';
+      }
+      editDialog = $('#edit-page-dialog');
+      nameInput = $('#edit-page-name-input');
+      closedCallback = function() {
+        var newName;
+        newName = nameInput.val();
+        if (newName !== '') {
+          if (page.id != null) {
+            if (pageName !== newName) {
+              return _this._updatePageName(page.id, newName);
+            }
+          } else {
+            return _this._createPage(newName);
+          }
+        }
+      };
+      editDialog.one('closed', closedCallback);
+      return editDialog.foundation('reveal', 'open');
+    };
+
+    AdminViewModel.prototype.editMenu = function(menu, event) {
+      var dialogElement, editDialog, editVM, menuName, title,
+        _this = this;
+      if (menu == null) {
+        menu = {};
+      }
+      if (menu.label != null) {
+        menuName = menu.label;
+      } else {
+        menuName = 'new_menu';
+      }
+      editDialog = $('#edit-menu-dialog');
+      editVM = {
+        name: ko.observable(menuName),
+        editMode: menu.id != null,
+        remove: function() {
+          var removeDialog, removeDialogElement, removeVM;
+          removeDialogElement = document.getElementById('remove-menu-dialog');
+          removeDialog = $(removeDialogElement).dialog({
+            title: 'Delete Menu',
+            modal: true,
+            close: function() {
+              return ko.cleanNode(removeDialogElement);
+            }
+          });
+          removeVM = {
+            name: menuName,
+            remove: function() {
+              _this._removeMenu(menu.id);
+              removeDialog.dialog('close');
+              return editDialog.dialog('close');
+            }
+          };
+          return ko.applyBindings(removeVM, removeDialogElement);
+        }
+      };
+      if (menu.id != null) {
+        title = 'Edit Menu';
+      } else {
+        title = 'New Menu';
+      }
+      dialogElement = document.getElementById('edit-menu-dialog');
+      ko.applyBindings(editVM, dialogElement);
+      return $(dialogElement).dialog({
+        title: title,
+        modal: true,
+        close: function() {
+          if (menu.id != null) {
+            if (editVM.name() !== menuName) {
+              _this._updateMenuName(menu.id, editVM.name());
+            }
+          } else {
+            _this._createMenu(editVM.name());
+          }
+          return ko.cleanNode(dialogElement);
+        }
+      });
+    };
+
+    AdminViewModel.prototype._updateMenuName = function(id, name) {
+      return $.ajax({
+        type: "PATCH",
+        url: "/menus/" + id,
+        data: {
+          label: name
+        },
+        success: this._requestPages
+      });
+    };
+
+    AdminViewModel.prototype._removeMenu = function(id) {
+      return $.ajax({
+        type: "DELETE",
+        url: "/menus/" + id,
+        success: this._requestPages
+      });
+    };
+
+    AdminViewModel.prototype.newMenu = function() {
+      return this.editMenu();
+    };
+
+    AdminViewModel.prototype._createMenu = function(name) {
+      return $.post("/menus", {
+        label: name
+      }, this._requestPages);
+    };
+
+    AdminViewModel.prototype.newPage = function() {
+      return this.editPage();
+    };
+
+    AdminViewModel.prototype._createPage = function(name) {
+      return $.post("/pages", {
+        label: name
+      }, this._requestPages);
     };
 
     return AdminViewModel;
@@ -48,7 +189,7 @@
   })();
 
   ready = function() {
-    return ko.applyBindings(new AdminViewModel());
+    return ko.applyBindings(new AdminViewModel(), document.getElementById('main-content'));
   };
 
   $(document).ready(ready);

@@ -17,7 +17,7 @@
         (layout/render "admin.html" {:user (session/get :user)}))))
 
 (defn about-page []
-  (db/save-page "my page" "some message")
+  (db/save-page "new page" "gallery")
   (println (db/get-pages))
   (layout/render "about.html" {:user (session/get :user)}))
 
@@ -29,10 +29,35 @@
   (layout/render "login.html"))
 
 (defn get-pages []
-  (let [pages (db/get-pages)]
+  (let [pages (db/get-pages)
+        menus (db/get-menus)]
     {:content-type :json
-     :body { :pages pages }
+     :body { :pages pages :menus menus }
      }))
+
+(defn save-menu [params]
+  (db/save-menu (params :label))
+
+  { :content-type :json :body {} }
+)
+
+(defn save-page [params]
+  (db/save-page (params :label) :gallery)
+
+  { :content-type :json :body {} }
+)
+
+(defn update-menu [params]
+  (db/update-menu (params :id) (dissoc params :id))
+
+  { :content-type :json :body {} }
+)
+
+(defn remove-menu [id]
+  (db/remove-menu id)
+
+  { :content-type :json :body {} }
+)
 
 (defroutes home-routes
   (GET "/" [] (home-page))
@@ -44,5 +69,11 @@
   (GET "/oauth2Callback" {params :params} (login/oauth2-callback params))
   (GET "/logout" [] (login/logout))
   (GET "/layout" [] (layout/layout))
+
+  ; for admin stuff
   (GET "/pages" [] (get-pages))
+  (POST "/pages" { params :params } (save-page params))
+  (POST "/menus" { params :params } (save-menu params))
+  (PATCH "/menus/:id" { params :params } (update-menu params))
+  (DELETE "/menus/:id" [id] (remove-menu id))
 )

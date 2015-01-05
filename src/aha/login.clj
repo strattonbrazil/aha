@@ -81,7 +81,7 @@
       ; log them in!      
       (do
         (session/put! :user email)
-        (redirect "/about"))
+        (redirect "/admin"))
       
       ; unrecognized email
       (let [message (str "Unrecognized admin email: " email)]

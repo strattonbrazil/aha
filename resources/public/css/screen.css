@@ -4,6 +4,10 @@ body {
     height: 100%;
 }
 
+select {
+    margin: 0 0 0 0;
+}
+
 .add-widget-button {
     text-align: center;
 }
@@ -26,4 +30,17 @@ body {
 
 .copyright {
     text-align: center;
+}
+
+.clickable {
+    border: solid 1px transparent;
+}
+
+.clickable:hover {
+    color: green;
+    border: solid 1px green;
+}
+
+.scratch {
+    display: none;
 }

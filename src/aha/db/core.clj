@@ -1,18 +1,33 @@
 (ns aha.db.core
-  (:require [aha.db.schema                 :as schema]
-            [clojurewerkz.cassaforte.cql   :as cql]
-            [clojurewerkz.cassaforte.uuids :as uuids]))
+  (:use korma.core
+        [korma.db :only (defdb)])
+  (:require [aha.db.schema :as schema]))
 
-(defn save-page [name message]
-  (let [conn (schema/get-connection)]
-    (cql/use-keyspace conn "aha_keyspace")
-    (cql/insert conn "pages" {:id (uuids/unix-timestamp (uuids/time-based))
-                              :label "some page" 
-                              :menu (uuids/unix-timestamp (uuids/time-based)) }))
+(defdb db schema/db-spec)
+
+(defentity menus)
+(defentity pages)
+
+(defn save-menu [label]
+  (insert menus (values { :label label })))
+
+(defn update-menu [id params]
+  (update menus (set-fields params) (where { :id id }))
 )
 
+(defn remove-menu [id]
+  (delete menus (where { :id id }))
+)
+
+(defn save-page [label type]
+  (insert pages
+          (values {:label label
+                   :type type
+                   :menu 3 })))
+
+(defn get-menus [] (select menus))
+(defn get-splash-page [] { :label "Splash Screen" :type :splash })
 (defn get-pages [] 
-  (let [conn (schema/get-connection)]
-    (cql/use-keyspace conn "aha_keyspace")
-    (cql/select conn "pages"))
+  (cons (get-splash-page) (select pages))
 )
+
