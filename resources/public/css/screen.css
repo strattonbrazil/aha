@@ -4,8 +4,10 @@ body {
     height: 100%;
 }
 
-select {
-    margin: 0 0 0 0;
+table .ui-sortable {
+    width: 100%;
+    min-height: 50px;
+    display: block;
 }
 
 .add-widget-button {

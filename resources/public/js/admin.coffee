@@ -18,67 +18,121 @@ $.contextMenu({
 
 })
 
+class Menu
+    constructor: (adminVM, menuData) ->
+        @_adminVM = adminVM
+        @id = menuData.id
+        @name = menuData.title
+
+        @pages = ko.observableArray(menuData.pages)
+        @pages.menuId = @id
+        @orderChanged = (movedInfo) =>
+            pageId = movedInfo.item.id
+            @_movePage(pageId,
+                movedInfo.sourceParent.menuId, movedInfo.sourceIndex,
+                movedInfo.targetParent.menuId, movedInfo.targetIndex)
+
+    _movePage: (pageId, srcMenuId, srcIndex, targetMenuId, targetIndex) ->
+        $.ajax({
+            type: "PATCH"
+            url: "/pages/#{pageId}/order"
+            data: {
+                srcMenuId: srcMenuId,
+                srcIndex: srcIndex,
+                targetMenuId: targetMenuId,
+                targetIndex: targetIndex
+            }
+            success: -> console.log('moved')
+        })
+
+    newPage: (viewmodel, event) =>
+        @editPage()
+
+    editPage: (page={}, event) =>
+        if page.title?
+            pageName = page.title
+        else
+            pageName = 'new_page'
+            
+        editDialog = $('#edit-page-dialog')
+
+        editVM = {
+            name: ko.observable(pageName)
+            editMode: page.id?
+            remove: =>
+                removeDialogElement = document.getElementById('remove-dialog')
+                removeDialog = $(removeDialogElement).dialog({
+                    title: 'Delete Page'
+                    modal: true
+                    close: ->
+                        ko.cleanNode(removeDialogElement)
+                })
+
+                removeVM = {
+                    name: pageName
+                    remove: =>
+                        @_removePage(page.id)
+                        removeDialog.dialog('close')
+                        editDialog.dialog('close')
+                }
+                ko.applyBindings(removeVM, removeDialogElement)
+        }
+
+        if page.id?
+            title = 'Edit Page'
+        else
+            title = 'New Page'
+
+        dialogElement = document.getElementById('edit-page-dialog')
+        ko.applyBindings(editVM, dialogElement)
+        $(dialogElement).dialog({
+            title: title
+            modal: true
+            close: =>
+                if page.id? # updating page
+                    if editVM.name() isnt pageName
+                        @_updatePageName(page.id, editVM.name())
+                else
+                    @_createPage(editVM.name())
+
+                ko.cleanNode(dialogElement)
+        })
+
+    _createPage: (name) =>
+        $.post("/pages", { title: name, menuId: @id }, @_adminVM._requestPages)
+
 class AdminViewModel
     constructor: ->
-        @pages = ko.observableArray()
-        #@pageTypes = ko.observableArray(["gallery", "link"])
         @menus = ko.observableArray()
-        #@availableMenus = ko.computed(=> ["(unassigned)"].concat(@menus()))
+        #@pages = ko.observableArray()
 
         @_requestPages()
 
     _requestPages: =>
         parseResponse = (data) =>
-            @menus(data.menus)
-            @pages(data.pages)
+            @menus.removeAll()
+            for menuData in data.menus
+                @menus.push(new Menu(@, menuData))
+            #@pages(data.pages)
 
-        $.getJSON("/pages", parseResponse)
+        $.getJSON("/menus", parseResponse)
 
-    editPage: (page={}, event) =>
-        if page.label?
-            pageName = page.label
-        else
-            pageName = 'new_page'
-        editDialog = $('#edit-page-dialog')
-        nameInput = $('#edit-page-name-input')
 
-        closedCallback = =>
-            newName = nameInput.val()
-            if newName isnt ''
-                if page.id? # editing page
-                    if pageName isnt newName # changed
-                        @_updatePageName(page.id, newName)
-                else # new page
-                    @_createPage(newName)
-
-        editDialog.one('closed', closedCallback)
-        
-        editDialog.foundation('reveal', 'open')
         
     # loads a menu or creates a new one
     editMenu: (menu={}, event) =>
-        if menu.label?
-            menuName = menu.label
+        if menu.title?
+            menuName = menu.title
         else
             menuName = 'new_menu'
             
         editDialog = $('#edit-menu-dialog')
         
-        #removeDialog = $('#remove-menu-dialog')
-        #nameInput = $('#edit-menu-name-input')
-        #removeButton = $('#edit-menu-remove-button')
-        #confirmRemoveButton = $('#remove-menu-button')
-        #openedCallback = ->
-
-
-            
-            
-           
         editVM = {
             name: ko.observable(menuName)
             editMode: menu.id?
             remove: =>
-                removeDialogElement = document.getElementById('remove-menu-dialog')
+                removeDialogElement = document.getElementById('remove-dialog')
                 removeDialog = $(removeDialogElement).dialog({
                     title: 'Delete Menu'
                     modal: true
@@ -120,7 +174,7 @@ class AdminViewModel
         $.ajax({
           type: "PATCH"
           url: "/menus/#{id}"
-          data: { label: name }
+          data: { title: name }
           success: @_requestPages
         })
 
@@ -135,13 +189,13 @@ class AdminViewModel
         @editMenu()
 
     _createMenu: (name) =>
-        $.post("/menus", { label: name }, @_requestPages)
+        $.post("/menus", { title: name }, @_requestPages)
 
     newPage: =>
         @editPage()
 
     _createPage: (name) =>
-        $.post("/pages", { label: name }, @_requestPages)
+        $.post("/pages", { title: name }, @_requestPages)
 
 ready = ->
     ko.applyBindings(new AdminViewModel(), document.getElementById('main-content'))

@@ -15,8 +15,7 @@
                  [clj-http "1.0.1"]
                  [org.clojure/data.codec "0.1.0"]
                  [org.clojure/data.json "0.2.5"]
-                 [korma "0.3.0"]
-                 [org.xerial/sqlite-jdbc "3.8.7"]
+                 [cheshire "5.4.0"]
                  [prone "0.6.0"]]
 
   :repl-options {:init-ns aha.repl}

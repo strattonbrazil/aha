@@ -38,7 +38,7 @@
 
   ;;initialize the database if needed
   (when-not (schema/initialized?)
-    (schema/create-tables))
+    (schema/init-db))
 
   (if (env :dev) (parser/cache-off!))
   ;;start the expired session cleanup job

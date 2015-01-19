@@ -18,7 +18,6 @@
 
 (defn about-page []
   (db/save-page "new page" "gallery")
-  (println (db/get-pages))
   (layout/render "about.html" {:user (session/get :user)}))
 
 (defn error-page [params]
@@ -35,6 +34,11 @@
      :body { :pages pages :menus menus }
      }))
 
+(defn get-menus []
+  {:content-type :json :body { :menus (db/get-menus) } }
+)
+
+
 (defn save-menu [params]
   (db/save-menu (params :label))
 
@@ -42,7 +46,17 @@
 )
 
 (defn save-page [params]
-  (db/save-page (params :label) :gallery)
+  (db/save-page (params :title) "gallery" (read-string (params :menuId)))
+
+  { :content-type :json :body {} }
+)
+
+(defn move-page [params]
+  (db/move-page (read-string (params :pageId))
+                (read-string (params :srcMenuId))
+                (read-string (params :srcIndex))
+                (read-string (params :targetMenuId))
+                (read-string (params :targetIndex)))
 
   { :content-type :json :body {} }
 )
@@ -73,6 +87,8 @@
   ; for admin stuff
   (GET "/pages" [] (get-pages))
   (POST "/pages" { params :params } (save-page params))
+  (PATCH "/pages/:pageId/order" { params :params } (move-page params))
+  (GET "/menus" [] (get-menus))
   (POST "/menus" { params :params } (save-menu params))
   (PATCH "/menus/:id" { params :params } (update-menu params))
   (DELETE "/menus/:id" [id] (remove-menu id))

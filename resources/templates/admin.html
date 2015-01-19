@@ -21,64 +21,56 @@
     </div>
   </div>
 
-  <div id="edit-page-dialog" class="reveal-modal" data-reveal>
-    <h5>Edit Page</h5>
+  <div style="display: none" id="edit-page-dialog">
     <div class="row">
       <div class="large-12 columns">
         <label>Name</label>
-        <input id="edit-page-name-input" placeholder="(page name)"></input>
+        <input placeholder="(page name)" data-bind="value: name"></input>
       </div>
     </div>
+    <br/>
+    <div class="row">
+      <div class="large-12 columns">
+        <button class="alert tiny" data-bind="click: remove, visible: editMode">Delete Page</button>
+      </div>
+    </div>
+
   </div>
 
   <div id="main-content" class="row">
-    <div class="columns large-2">
-      <h5>Menus</h5>
-      <table>
-        <thead>
-          <tr><th>Name</th></tr>
-        </thead>
-        <tbody data-bind="foreach: menus">
-          <tr><td class="clickable" data-bind="click: $parent.editMenu"><i class="foundicon-settings" onclick="" title="rename menu"></i> <span data-bind="text: $data.label"></td></tr>
-        </tbody>
-        <tfoot>
-          <tr><td><button class="tiny" data-bind="click: newMenu"><i class="foundicon-plus"></i> New Menu</button></td></tr>
-        </tfoot>
-      </table>
+    <div class="columns large-8">
+      <h5>Menu/Page Hierarchy</h5>
+      <div data-bind="foreach: menus">
+        <table style="float: left;">
+          <tr><th data-bind="text: 'Menu: ' + name">Name</th></tr>
+
+          <tbody class="droppable" data-bind="sortable: { data: pages, afterMove: orderChanged }">
+            <tr><td class="clickable" data-bind="click: $parent.editMenu"><i class="foundicon-settings" onclick="" title="rename menu"></i> <span data-bind="text: $data.title"></td></tr>
+          </tbody>
+
+          <tr><td><button class="tiny" data-bind="click: newPage">New Page</button></td></tr>
+        </table>
+      </div>
+      <button style="display: inline-block">New Menu</button>
     </div>
-    <div class="columns large-6">
-      
+
+    <div class="columns large-2">
       <h5>Pages</h5>
       <table>
         <thead>
           <tr><th>Name</th><th>Type</th><th>Menu</th></tr>
         </thead>
-        <tbody data-bind="foreach: pages">
-          <tr>
-            <td class="clickable" data-bind="click: $parent.editPage"><i class="foundicon-page"></i> <span data-bind="text: label"></span></td>
-            <td class="clickable" data-bind="text: $data.type, click: $parent.editPage"></td>
-            <!-- ko if: $data.type === "splash" -->
-            <td>n/a</td>
-            <!-- /ko -->
-            <!-- ko ifnot: $data.type === "splash" -->
-            <td class="clickable" data-bind="text: $data.type, click: $parent.editPage">foo</td>
-            <!-- /ko -->
-          </tr>
-        </tbody>
+
         <tfoot>
           <tr><td colspan="3"><button class="tiny" data-bind="click: newPage"><i class="foundicon-plus"></i> New Page</button></td></tr>
         </tfoot>
       </table>
-    </div>
-
-    <div class="columns large-4">
-      <h1>Images</h1>
-
     </div>
   </div>
 {% endblock %}
 
 {% block page-scripts %}
 {% script "/js/admin.js" %}
+{% script "/libs/knockout-sortable-0.9.3/knockout-sortable.js" %}
 {% endblock %}
 
