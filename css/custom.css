@@ -1,0 +1,93 @@
+.masthead {
+    position: relative;
+}
+
+.masthead-gradient {
+    position: absolute;
+    top: 0px;
+}
+
+.masthead-text {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+}
+
+.masthead-header {
+    font-size: 3em;
+    color: #eeeeee;
+
+    text-shadow: 2px 2px #333333;
+}
+
+.masthead-subheader {
+    font-size: 2em;
+    color: #dddddd;
+
+    text-shadow: 2px 2px #222222;
+}
+
+@media screen and (max-width: 480px) {
+    .masthead-header {
+        font-size: 2em;
+    }
+}
+
+.slick-prev.slick-arrow {
+    position: absolute;
+    z-index: 2;
+    top: 45%;
+}
+
+.slick-next.slick-arrow {
+    position: absolute;
+    z-index: 2;
+    top: 45%;
+    right: 0px;
+}
+
+.contain-to-grid, .top-bar{
+    background: #eaeaea;
+}
+
+footer {
+    padding: 1em;
+    text-align: center;
+}
+
+.name{
+    background: #5a9aa8;
+    padding: 5px 30px;
+    height: 60px !important;
+}
+
+.top-bar-section ul li, .top-bar-section li:not(.has-form) a:not(.button){
+    background: none;
+    
+}
+
+.top-bar-section li:not(.has-form) a:hover:not(.button){
+    background: none;
+    text-decoration: underline;
+    color: #1a1a1a;    
+}
+
+.top-bar-section ul li > a{
+    color: #1a1a1a;
+}
+
+.active{
+    text-decoration: underline;
+    font-weight: bold !important;
+}
+
+.media-icon {
+    width: 32px;
+    height: 32px;
+
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -o-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    -ms-interpolation-mode: nearest-neighbor;
+}

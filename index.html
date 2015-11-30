@@ -1,0 +1,135 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/foundation.css" />
+    <link rel="stylesheet" href="css/custom.css" />
+    <link rel="stylesheet" href="foundation-icons/foundation-icons.css" />
+    <script src="js/vendor/modernizr.js"></script>
+    
+    <link rel="stylesheet" type="text/css" href="libs/slick-1.5.7/slick/slick.css" />
+</head>
+
+<body>
+  <!--
+      "Contact Me" dialog
+    -->
+  <div id="myModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+    <h2 id="modalTitle">Let's get in touch.</h2>
+    <p>I am always drawing.  It's like a disease.  If you have a project in mind that we could work on together let me know</p>
+    <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+
+    <img src="./img/email.png">
+  </div>
+
+    <div id="top"></div>
+    <div class="contain-to-grid sticky">
+        <nav class="top-bar" data-topbar>
+            <ul class="title-area">
+                <li class="name">
+                    <h1>
+                        <a href="#">Art of Anthony Holden</a>
+                    </h1>
+                </li>
+                <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+                <li class="toggle-topbar menu-icon">
+                    <a href="#">
+                        <span>Menu</span>
+                    </a>
+                </li>
+            </ul>
+            <section class="top-bar-section">
+                <!-- Right Nav Section -->
+                <ul id="nav" class="right">
+                    <li>
+                      <a href="#" data-reveal-id="myModal">Contact Me</a>
+                    </li>
+                </ul>
+            </section>
+        </nav>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <div class="carousel">
+          <div class="masthead">
+            <img src="img/masthead1.jpg">
+            <img class="masthead-gradient" src="img/masthead_gradient.png">
+            <div class="masthead-text">
+              <div class="masthead-header">Fruity Cutie Rescue</div>
+              <div class="masthead-subheader">A comic of epic proportions</div>
+            </div>
+          </div>
+          <div class="masthead">
+            <img src="img/masthead2.jpg">
+            <div class="masthead-text">
+              <div class="masthead-header">A Kitchen Adventure</div>
+              <div class="masthead-subheader">Another comic of daily life</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns">
+        <h3>My Art</h3>
+        <p>Hi, I'm Anthony Holden and I'm an amazing artist.  I specialize in making great art.  You can find it in several places.  </p>
+
+        <table>
+          <tr>
+            <td>facebook img</td>
+            <td><span>Facebook</span> - This holds a bunch of stuff</td>
+          </tr>
+          <tr>
+            <td>instagram img</td>
+            <td><span>Instagram</span> - Where I put my ... work</td>
+          </tr>
+          <tr>
+            <td>patreon img</td>
+            <td><span>Patreon</span> - If you like my work you can support me here</td>
+          </tr>
+          <tr>
+            <td>twitter img</td>
+            <td><span>Twitter</span> - I post stuff here</td>
+          </tr>
+          <tr>
+            <td>vimeo img</td>
+            <td><span>Vimeo</span> - I make great tutorial videos explaining my process here</td>
+          </tr>
+        </table>
+
+        <h3>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="row full-width">
+        <div class="small-12">
+          &copy - Anthony Holden Art 2015.
+        </div>
+      </div>
+    </footer>
+
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/foundation.min.js"></script>
+    <script type="text/javascript" src="libs/slick-1.5.7/slick/slick.min.js"></script>
+
+    <script>
+        $(document).foundation();
+    </script>
+    <script>
+
+$(document).ready(function(){
+  $('.carousel').slick({
+    autoplay: true,
+    autoplaySpeed: 4000
+  });
+});
+
+    </script>
+</body>
+
+</html>
