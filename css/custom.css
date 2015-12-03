@@ -53,12 +53,22 @@
 footer {
     padding: 1em;
     text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
 }
 
 .name{
     background: #5a9aa8;
     padding: 5px 30px;
     height: 60px !important;
+}
+
+.name a {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.top-bar-section a {
+    font-family: 'Montserrat', sans-serif !important;
 }
 
 .top-bar-section ul li, .top-bar-section li:not(.has-form) a:not(.button){
@@ -88,4 +98,8 @@ footer {
 .media-icon {
     width: 96px;
     height: 96px;
+}
+
+p {
+    font-family: 'Slabo 27px', serif;
 }
