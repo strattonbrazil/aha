@@ -81,13 +81,11 @@ footer {
     font-weight: bold !important;
 }
 
-.media-icon {
-    width: 32px;
-    height: 32px;
+.media-table {
+    text-align: center;
+}
 
-    image-rendering: -moz-crisp-edges;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: -o-crisp-edges;
-    image-rendering: -webkit-optimize-contrast;
-    -ms-interpolation-mode: nearest-neighbor;
+.media-icon {
+    width: 96px;
+    height: 96px;
 }
